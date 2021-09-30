@@ -1,0 +1,68 @@
+#include <iostream>
+#include <set>
+#include <algorithm>
+#include <iterator>
+using namespace std;
+
+void mySampe()
+{
+   set<int> c;
+
+   c.insert(1);
+   c.insert(2);
+   c.insert(3);
+   c.insert(4);
+   c.insert(5);
+   c.insert(6);
+
+   cout << "lower_bound(3): " << *c.lower_bound(3) << endl;
+   cout << "upper_bound(3): " << *c.upper_bound(3) << endl;
+   cout << "equal_range(3): " << *c.equal_range(3).first << " "
+                              << *c.equal_range(3).second << endl;
+   cout << endl;
+   cout << "lower_bound(5): " << *c.lower_bound(5) << endl;
+   cout << "upper_bound(5): " << *c.upper_bound(5) << endl;
+   cout << "equal_range(5): " << *c.equal_range(5).first << " "
+                              << *c.equal_range(5).second << endl;
+   cout << endl;
+
+   set<double> d;
+
+   d.insert(4.4);
+
+   if (d.insert(3.3).second)
+       cout << "3.3 inserted" << endl;
+   else
+       cout << "3.3 already exits" << endl;
+
+   cout << "data: ";
+   for (auto elem : d)
+       cout << elem << ' ';
+   cout << endl;
+}
+
+int main()
+{
+   //type of the collection
+   //-no duplicates
+   //-elements are integral value
+   //-descending order
+   set<int,greather<int>> coll1;
+
+   //masukan elemen dalam urutan acak menggunakan
+   //fungsi anggota yg berbeda
+   coll1.insert( {4,3,5,1,6,2} );
+   coll1.insert(5);
+
+   //print all elements
+   for (int elem : coll1)
+       cout << elem << ' ';
+   cout << endl;
+
+   //masukan 4 lagi dan proses pengembalian nilai
+   auto status = coll1.insert(4);
+   if (status.second) {
+       cout << "4 inserted as elemen " <<
+ distance(coll1.begin(), status.first) + 1 << endl;
+   }
+}
