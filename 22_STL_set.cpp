@@ -4,6 +4,34 @@
 #include <iterator>
 using namespace std;
 
+//type for runtime sorting criterion
+class RuntimeCmp {
+   public:
+      enum cmp_mode {normal, reverse};
+   private:
+      cmp_mode mode;
+   public:
+      //constructor for sorting criterion
+      //-default criterion uses value normal
+      RuntimeCmp(cmp_mode m=normal) : mode(m) {
+      }
+
+      //comparison of elements
+      //-member function for any element type
+      template <typename T>
+      bool operator() (const T &t1, const T &t2) const {
+           return mode==normal ? t1 < t2
+                               : t2 < t1;
+      }
+
+      //comparison of sorting criteria
+      bool operator == (const RuntimeCmp &rc) const {
+           return mode == rc.mode;
+      }
+};
+//jenis satu set yang menggunakan kriteria penyortiran ini
+typedef set<int,RuntimeCmp> IntSet;
+
 void mySample()
 {
    cout << "############ MYSAMPLE ############" << endl;
@@ -43,8 +71,9 @@ void mySample()
    cout << endl;
 }
 
-int main()
+void setku()
 {
+   cout << "############ SETKU ############" << endl;
    //type of collection
    //-no duplicate
    //-elements are integral values
@@ -91,4 +120,52 @@ int main()
    copy(coll2.cbegin(), coll2.cend(),
         ostream_iterator<int>(cout, " "));
    cout << endl;
+   cout << endl;
+}
+
+int main()
+{
+
+   mySample();
+   setku();
+
+   cout << "############ ADVENDED ############" << endl;
+   //create, fill, dan print set dengan urutan elemen normal
+   //-menggunakan kriteria penyortiran default
+   IntSet coll1 = { 4,7,5,1,6,2,5 };
+
+   cout << "coll1: ";
+   for (auto elem : coll1)
+       cout << elem << ' ';
+   cout << endl;
+
+   //buat kriteria penyortiran dg urutan elemen terbalik
+   RuntimeCmp reverse_order(RuntimeCmp::reverse);
+
+   //create, fill dan print set dengan urutan terbalik
+   IntSet coll2(reverse_order);
+   coll2 = { 4,7,5,1,6,2,5 };
+
+   cout << "coll2: ";
+   for (auto elem : coll2)
+       cout << elem << ' ';
+   cout << endl;
+
+   //menetapkan elemen dan sorting
+   coll1 = coll2;
+   coll1.insert(3);
+
+   cout << "coll1: ";
+   for (auto elem : coll1)
+       cout << elem << ' ';
+   cout << endl;
+
+   //hanya untuk memastikan
+   if (coll1.value_comp() == coll2.value_comp())
+       cout << "coll1 dan coll2 memiliki kriteria penyortiran yang sama " << endl;
+   else
+       cout << "coll1 dan coll2 memiliki kriteria penyortiran yang berbeda " << endl;
+   cout << endl;
+   cout << endl;
+
 }
